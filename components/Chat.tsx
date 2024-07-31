@@ -10,6 +10,7 @@ import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "@/firebase";
 import { askQuestion } from "@/actions/askQuestion";
 import ChatMessage from "./ChatMessage";
+import { useToast } from "./ui/use-toast";
 
 export type Message = {
   id?: string;
@@ -24,6 +25,7 @@ function Chat({ id }: { id: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isPending, startTransition] = useTransition();
   const bottomOfChatRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const [snapshot, loading, error] = useCollection(
     user &&
@@ -42,10 +44,8 @@ function Chat({ id }: { id: string }) {
   useEffect(() => {
     if (!snapshot) return;
 
-    console.log("Updated snapshot", snapshot.docs);
     const lastMessage = messages.pop();
     if (lastMessage?.role === "ai" && lastMessage.message === "Thinking...") {
-      //return dummy placeholder
       return;
     }
 
@@ -79,7 +79,11 @@ function Chat({ id }: { id: string }) {
       const { success, message } = await askQuestion(id, q);
 
       if (!success) {
-        //TODO: TOAST
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: message,
+        });
 
         setMessages((prev) =>
           prev.slice(0, prev.length - 1).concat([

@@ -51,7 +51,7 @@ const features = [
 
 export default function Home() {
   return (
-    <main className="flex-1 overflow-scroll p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600">
+    <main className="flex-1 overflow-auto p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600">
       <div className="bg-white py-24 sm:py-32 rounded-md drop-shadow-lg">
         <div className="flex flex-col justify-center items-center mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl sm:text-center">
@@ -85,7 +85,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <Image
               alt="App screenshot"
-              src="https://i.imgur.com/VciRSTI.jpeg"
+              src="https://i.imgur.com/QPn4PFf.jpeg"
               width={2432}
               height={1442}
               className="mb-[-0%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"
@@ -106,6 +106,7 @@ export default function Home() {
                     className="absolute left-1 top-1 h-5 w-5 text-indigo-600"
                   />
                 </dt>
+                <dd className="font-bold">{feature.name}</dd>
                 <dd>{feature.description}</dd>
               </div>
             ))}

@@ -28,7 +28,6 @@ function useUpload() {
   const handleUpload = async (file: File) => {
     if (!file || !user) return;
 
-    //TODO FREE/PRO plans...
     const fileIdToUploadTo = uuidv4();
     const storageRef = ref(
       storage,
@@ -47,7 +46,7 @@ function useUpload() {
         setProgress(percent);
       },
       (error) => {
-        console.log("Error uploading file: ", error);
+        console.error("Error uploading file: ", error);
       },
       async () => {
         setStatus(StatusText.UPLOADED);

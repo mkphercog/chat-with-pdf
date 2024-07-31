@@ -7,6 +7,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2Icon, RotateCw, ZoomInIcon, ZoomOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -16,8 +17,14 @@ function PdfView({ url }: { url: string }) {
   const [file, setFile] = useState<Blob | null>(null);
   const [rotation, setRotation] = useState<number>(0);
   const [scale, setScale] = useState<number>(1);
+  const router = useRouter();
 
   useEffect(() => {
+    if (!url) {
+      router.push("/dashboard");
+      return;
+    }
+
     const fetchFile = async () => {
       const response = await fetch(url);
       const file = await response.blob();
@@ -26,7 +33,7 @@ function PdfView({ url }: { url: string }) {
     };
 
     fetchFile();
-  }, [url]);
+  }, [router, url]);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setNumPages(numPages);
@@ -93,7 +100,7 @@ function PdfView({ url }: { url: string }) {
         </div>
       </div>
 
-      {!file ? (
+      {!file || !url ? (
         <Loader2Icon className="animate-spin h-20 w-20 text-indigo-600 mt-20" />
       ) : (
         <Document
@@ -101,7 +108,7 @@ function PdfView({ url }: { url: string }) {
           file={file}
           rotate={rotation}
           onLoadSuccess={onDocumentLoadSuccess}
-          className="m-4 overflow-scroll"
+          className="m-4 overflow-auto"
         >
           <Page className="shadow-lg" scale={scale} pageNumber={pageNumber} />
         </Document>

@@ -1,9 +1,77 @@
 "use client";
 
+import createCheckoutSession from "@/actions/createCheckoutSession";
+import createStripePortal from "@/actions/createStripePortal";
 import { Button } from "@/components/ui/button";
+import useSubscription from "@/hooks/useSubscription";
+import getStripe from "@/lib/stripe-js";
+import { useUser } from "@clerk/nextjs";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import "./page.css";
+import {
+  FREE_DOC_LIMIT,
+  FREE_MESSAGES_LIMIT,
+  PRO_DOC_LIMIT,
+  PRO_MESSAGES_LIMIT,
+} from "@/constants/plans";
+
+export type UserDetails = {
+  email: string;
+  name: string;
+};
+
+const FREE_FEATURES = [
+  `${FREE_DOC_LIMIT} Documents`,
+  `Up to ${FREE_MESSAGES_LIMIT} messages per document`,
+  "Try out the AI Chat Functionality",
+];
+const PRO_FEATURES = [
+  `Store up to ${PRO_DOC_LIMIT} Documents`,
+  "Ability to Delete Documents",
+  `Up to ${PRO_MESSAGES_LIMIT} messages per document`,
+  "Full Power AI Chat Functionality with Memory Recall",
+  "Advanced analitics",
+];
 
 function PricingPage() {
+  const { user } = useUser();
+  const router = useRouter();
+  const { hasActiveMembership, loading } = useSubscription();
+  const [isPending, startTransition] = useTransition();
+
+  const handleUpgrade = () => {
+    if (!user) return;
+
+    const userDetails: UserDetails = {
+      email: user.primaryEmailAddress?.toString()!,
+      name: user.fullName!,
+    };
+
+    startTransition(async () => {
+      const stripe = await getStripe();
+
+      if (hasActiveMembership) {
+        const stripePortalUrl = await createStripePortal();
+        return router.push(stripePortalUrl);
+      }
+
+      const sessionId = await createCheckoutSession(userDetails);
+
+      await stripe?.redirectToCheckout({
+        sessionId,
+      });
+    });
+  };
+
+  const proPlanButtonText =
+    isPending || loading
+      ? "Loading..."
+      : hasActiveMembership
+      ? "Manage plan"
+      : "Upgrade to pro";
+
   return (
     <div>
       <div className="py-24 sm:py-32">
@@ -38,21 +106,19 @@ function PricingPage() {
               role="list"
               className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
             >
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />2
-                Documents
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Up to 3 messages per document
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Try out the AI Chat Functionality
-              </li>
+              {FREE_FEATURES.map((feat) => (
+                <li className="flex gap-x-3" key={feat}>
+                  <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
+                  {feat}
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="ring-2 ring-indigo-600 p-8 h-fit pb-12 rounded-3xl">
+          <div className="relative ring-2 ring-indigo-600 p-8 h-fit pb-12 rounded-3xl">
+            <div className="ribbon font-semibold text-white bg-indigo-700 text-xl md:text-2xl lg:text-3xl">
+              Coming soon!
+            </div>
+
             <h3 className="text-lg font-semibold leading-8 text-indigo-600">
               Pro Plan
             </h3>
@@ -61,42 +127,32 @@ function PricingPage() {
             </p>
             <p className="mt-6 flex items-baseline gap-x-1">
               <span className="text-4xl font-bold tracking-tight text-gray-900">
-                $5.99
+                -.--
               </span>
               <span className="text-sm font-semibold leading-6 text-gray-600">
                 / month
               </span>
             </p>
 
-            <Button className="mt-6 w-full block">Upgrade to Pro</Button>
+            <Button
+              className="mt-6 w-full block bg-indigo-600 hover:bg-indigo-500"
+              disabled={true}
+              //maybe in the future for now I don't have Stripe account
+              // disabled={loading || isPending}
+              // onClick={handleUpgrade}
+            >
+              {proPlanButtonText}
+            </Button>
             <ul
               role="list"
               className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
             >
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />2
-                Store up to 20 Documents
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Ability to Delete Documents
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Up to 100 messages per document
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Full Power AI Chat Functionality with Memory Recall
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                Advanced analitics
-              </li>
-              <li className="flex gap-x-3">
-                <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                24-hour support response time
-              </li>
+              {PRO_FEATURES.map((feat) => (
+                <li className="flex gap-x-3" key={feat}>
+                  <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
+                  {feat}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

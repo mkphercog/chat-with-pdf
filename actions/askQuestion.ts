@@ -1,12 +1,10 @@
 "use server";
 
 import { Message } from "@/components/Chat";
+import { FREE_MESSAGES_LIMIT, PRO_MESSAGES_LIMIT } from "@/constants/plans";
 import { adminDb } from "@/firebaseAdmin";
 import { generateLangchainCompletion } from "@/lib/langchain";
 import { auth } from "@clerk/nextjs/server";
-
-const FREE_LIMIT = 3;
-const PRO_LIMIT = 100;
 
 export const askQuestion = async (id: string, question: string) => {
   auth().protect();
@@ -23,7 +21,24 @@ export const askQuestion = async (id: string, question: string) => {
     (doc) => doc.data().role === "human"
   );
 
-  //LIMIT PRO/FREE here
+  const userRef = await adminDb.collection("users").doc(userId!).get();
+  if (!userRef.data()?.hasActiveMembership) {
+    if (userMessages.length >= FREE_MESSAGES_LIMIT) {
+      return {
+        success: false,
+        message: `You'll need to upgrade to PRO to ask more than ${FREE_MESSAGES_LIMIT} questions!`,
+      };
+    }
+  }
+
+  if (userRef.data()?.hasActiveMembership) {
+    if (userMessages.length >= PRO_MESSAGES_LIMIT) {
+      return {
+        success: false,
+        message: `You've reached the PRO limit of ${PRO_MESSAGES_LIMIT} questions per document!`,
+      };
+    }
+  }
 
   const userMessage: Message = {
     role: "human",

@@ -11,9 +11,16 @@ import {
 } from "lucide-react";
 import useUpload, { StatusText } from "@/hooks/useUpload";
 import { useRouter } from "next/navigation";
+import useSubscription from "@/hooks/useSubscription";
+import { useToast } from "./ui/use-toast";
+
+const FILE_MAX_SIZE_IN_BYTES = 500_000;
+const FILE_MAX_SIZE_IN_KB = FILE_MAX_SIZE_IN_BYTES / 1000;
 
 function FileUploader() {
   const { progress, status, fileId, handleUpload } = useUpload();
+  const { isOverFileLimit, filesLoading } = useSubscription();
+  const { toast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,13 +32,36 @@ function FileUploader() {
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
+
+      if (file?.size >= FILE_MAX_SIZE_IN_BYTES) {
+        toast({
+          variant: "destructive",
+          title: "File to big",
+          description: `Max size ${FILE_MAX_SIZE_IN_KB} KB.`,
+        });
+        return;
+      }
+
       if (file) {
-        await handleUpload(file);
+        if (!isOverFileLimit && !filesLoading) {
+          await handleUpload(file);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Free Plan File Limit Reached",
+            description:
+              "You have reached the maximum number of files allowed for your account. Please upgrade to add more documents.",
+          });
+        }
       } else {
-        //toast...
+        toast({
+          variant: "destructive",
+          title: "Wrong file extension",
+          description: "Pdf's only accepted",
+        });
       }
     },
-    [handleUpload]
+    [filesLoading, handleUpload, isOverFileLimit, toast]
   );
 
   const statusIcons: {
@@ -106,8 +136,8 @@ function FileUploader() {
               <>
                 <CircleArrowDown className="h-20 w-20 animate-bounce" />
                 <p>
-                  Drag &apos;n&apos; drop some files here, or click to select
-                  files
+                  Drag &apos;n&apos; drop some file here, or click to select
+                  file, max file size {FILE_MAX_SIZE_IN_KB} KB
                 </p>
               </>
             )}
