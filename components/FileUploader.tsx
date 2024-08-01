@@ -13,9 +13,7 @@ import useUpload, { StatusText } from "@/hooks/useUpload";
 import { useRouter } from "next/navigation";
 import useSubscription from "@/hooks/useSubscription";
 import { useToast } from "./ui/use-toast";
-
-const FILE_MAX_SIZE_IN_BYTES = 500_000;
-const FILE_MAX_SIZE_IN_KB = FILE_MAX_SIZE_IN_BYTES / 1000;
+import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants/plans";
 
 function FileUploader() {
   const { progress, status, fileId, handleUpload } = useUpload();

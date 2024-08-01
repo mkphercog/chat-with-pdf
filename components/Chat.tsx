@@ -99,7 +99,7 @@ function Chat({ id }: { id: string }) {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-scroll">
+    <div className="flex flex-col h-full overflow-auto">
       <div className="flex-1 w-full">
         {loading ? (
           <div className="flex items-center justify-center">

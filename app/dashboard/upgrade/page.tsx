@@ -1,30 +1,22 @@
 "use client";
 
-import createCheckoutSession from "@/actions/createCheckoutSession";
-import createStripePortal from "@/actions/createStripePortal";
 import { Button } from "@/components/ui/button";
 import useSubscription from "@/hooks/useSubscription";
-import getStripe from "@/lib/stripe-js";
-import { useUser } from "@clerk/nextjs";
 import { CheckIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import "./page.css";
 import {
+  FILE_MAX_SIZE_IN_KB,
   FREE_DOC_LIMIT,
   FREE_MESSAGES_LIMIT,
   PRO_DOC_LIMIT,
   PRO_MESSAGES_LIMIT,
 } from "@/constants/plans";
 
-export type UserDetails = {
-  email: string;
-  name: string;
-};
+import "./page.css";
 
 const FREE_FEATURES = [
   `${FREE_DOC_LIMIT} Documents`,
   `Up to ${FREE_MESSAGES_LIMIT} messages per document`,
+  `Files up to ${FILE_MAX_SIZE_IN_KB} KB`,
   "Try out the AI Chat Functionality",
 ];
 const PRO_FEATURES = [
@@ -36,41 +28,13 @@ const PRO_FEATURES = [
 ];
 
 function PricingPage() {
-  const { user } = useUser();
-  const router = useRouter();
   const { hasActiveMembership, loading } = useSubscription();
-  const [isPending, startTransition] = useTransition();
 
-  const handleUpgrade = () => {
-    if (!user) return;
-
-    const userDetails: UserDetails = {
-      email: user.primaryEmailAddress?.toString()!,
-      name: user.fullName!,
-    };
-
-    startTransition(async () => {
-      const stripe = await getStripe();
-
-      if (hasActiveMembership) {
-        const stripePortalUrl = await createStripePortal();
-        return router.push(stripePortalUrl);
-      }
-
-      const sessionId = await createCheckoutSession(userDetails);
-
-      await stripe?.redirectToCheckout({
-        sessionId,
-      });
-    });
-  };
-
-  const proPlanButtonText =
-    isPending || loading
-      ? "Loading..."
-      : hasActiveMembership
-      ? "Manage plan"
-      : "Upgrade to pro";
+  const proPlanButtonText = loading
+    ? "Loading..."
+    : hasActiveMembership
+    ? "Manage plan"
+    : "Upgrade to pro";
 
   return (
     <div>
@@ -95,7 +59,8 @@ function PricingPage() {
               Starter Plan
             </h3>
             <p className="mt-4 text-sm leading-6 text-gray-600">
-              Explore Core Features at No Cost
+              Explore core features at
+              <span className="font-bold text-gray-500"> No Cost</span>
             </p>
             <p className="mt-6 flex items-baseline gap-x-1">
               <span className="text-4xl font-bold tracking-tight text-gray-900">

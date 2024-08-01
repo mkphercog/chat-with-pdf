@@ -41,6 +41,11 @@ function ChatMessage({ message }: { message: Message }) {
         ) : (
           <Markdown>{message.message}</Markdown>
         )}
+        <p className="text-xs text-right mt-1">
+          {`${new Date(message.createdAt).toLocaleTimeString()}, ${new Date(
+            message.createdAt
+          ).toLocaleDateString()}`}
+        </p>
       </div>
     </div>
   );

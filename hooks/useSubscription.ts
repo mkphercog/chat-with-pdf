@@ -25,9 +25,8 @@ function useSubscription() {
 
   useEffect(() => {
     if (!snapshot) return;
-
     const data = snapshot.data();
-    //I comment this because I do not implement stripe yet, and I always has no data from firebase about hasActiveMembership
+    //I comment this because I do not implement Stripe yet, and I always has no data from firebase about hasActiveMembership
     // if (!data) return;
 
     setHasActiveMembership(data?.hasActiveMembership);

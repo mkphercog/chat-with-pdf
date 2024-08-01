@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="min-h-screen h-screen overflow-hidden flex flex-col">
+        <body className="min-h-dvh h-dvh overflow-hidden flex flex-col">
           <Toaster />
           {children}
         </body>

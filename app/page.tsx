@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs/server";
 import {
   BrainCogIcon,
   EyeIcon,
@@ -49,7 +50,9 @@ const features = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+
   return (
     <main className="flex-1 overflow-auto p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600">
       <div className="bg-white py-24 sm:py-32 rounded-md drop-shadow-lg">
@@ -76,8 +79,13 @@ export default function Home() {
             </p>
           </div>
 
-          <Button asChild className="mt-10">
-            <Link href="/dashboard">Get Started</Link>
+          {user?.id && (
+            <p className="text-3xl font-bold mt-10 text-indigo-600">{`Weclome, ${user?.firstName}!`}</p>
+          )}
+          <Button asChild className="mt-8">
+            <Link href="/dashboard">
+              {user?.id ? "Go to dashboard" : "Get started"}
+            </Link>
           </Button>
         </div>
 
