@@ -53,7 +53,7 @@ function PricingPage() {
           your workflow.
         </p>
 
-        <div className="max-w-md mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 md:max-w-2xl gap-8 lg:max-w-4xl">
+        <div className="max-w-md mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 md:max-w-2xl gap-8 lg:max-w-4xl px-4 md:px-0">
           <div className="ring-1 ring-gray-200 p-8 h-fit pb-12 rounded-3xl">
             <h3 className="text-lg font-semibold leading-8 text-gray-900">
               Starter Plan

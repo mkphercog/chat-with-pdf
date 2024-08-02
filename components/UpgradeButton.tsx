@@ -19,7 +19,7 @@ function UpgradeButton() {
       <Button
         asChild
         variant="default"
-        className="border-indigo-600 hidden md:inline-flex"
+        className="border-indigo-600 md:inline-flex"
       >
         <Link href={"/dashboard/upgrade"}>
           Upgrade <StarIcon className="ml-3 fill-indigo-600 text-white" />
