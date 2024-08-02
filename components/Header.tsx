@@ -12,7 +12,7 @@ import {
 
 function Header() {
   return (
-    <div className="flex justify-between bg-white shadow-sm p-5 border-b">
+    <div className="flex justify-between sticky top-0 left-0 z-50 bg-white shadow-sm p-5 border-b">
       <Link href="/" className="text-2xl">
         Chat to <span className="text-indigo-600">PDF</span>
       </Link>

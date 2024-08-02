@@ -76,24 +76,32 @@ function Chat({ id }: { id: string }) {
     ]);
 
     startTransition(async () => {
-      const { success, message } = await askQuestion(id, q);
+      try {
+        const { success, message } = await askQuestion(id, q);
 
-      if (!success) {
+        if (!success) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: message,
+          });
+
+          setMessages((prev) =>
+            prev.slice(0, prev.length - 1).concat([
+              {
+                role: "ai",
+                message: `Ups... ${message}`,
+                createdAt: new Date(),
+              },
+            ])
+          );
+        }
+      } catch (error) {
         toast({
           variant: "destructive",
           title: "Error",
-          description: message,
+          description: "Something went wrong. Try again.",
         });
-
-        setMessages((prev) =>
-          prev.slice(0, prev.length - 1).concat([
-            {
-              role: "ai",
-              message: `Ups... ${message}`,
-              createdAt: new Date(),
-            },
-          ])
-        );
       }
     });
   };
