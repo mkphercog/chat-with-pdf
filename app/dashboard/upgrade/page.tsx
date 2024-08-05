@@ -3,29 +3,9 @@
 import { Button } from "@/components/ui/button";
 import useSubscription from "@/hooks/useSubscription";
 import { CheckIcon } from "lucide-react";
-import {
-  FILE_MAX_SIZE_IN_KB,
-  FREE_DOC_LIMIT,
-  FREE_MESSAGES_LIMIT,
-  PRO_DOC_LIMIT,
-  PRO_MESSAGES_LIMIT,
-} from "@/constants";
+import { PRICING_FREE_FEATURES, PRICING_PRO_FEATURES } from "@/constants";
 
 import "./page.css";
-
-const FREE_FEATURES = [
-  `${FREE_DOC_LIMIT} Documents`,
-  `Up to ${FREE_MESSAGES_LIMIT} messages per document`,
-  `Files up to ${FILE_MAX_SIZE_IN_KB} KB`,
-  "Try out the AI Chat Functionality",
-];
-const PRO_FEATURES = [
-  `Store up to ${PRO_DOC_LIMIT} Documents`,
-  "Ability to Delete Documents",
-  `Up to ${PRO_MESSAGES_LIMIT} messages per document`,
-  "Full Power AI Chat Functionality with Memory Recall",
-  "Advanced analitics",
-];
 
 const PricingPage = () => {
   const { hasActiveMembership, loading } = useSubscription();
@@ -71,10 +51,10 @@ const PricingPage = () => {
               role="list"
               className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
             >
-              {FREE_FEATURES.map((feat) => (
-                <li className="flex gap-x-3" key={feat}>
+              {PRICING_FREE_FEATURES.map((feature) => (
+                <li className="flex gap-x-3" key={feature}>
                   <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                  {feat}
+                  {feature}
                 </li>
               ))}
             </ul>
@@ -101,10 +81,7 @@ const PricingPage = () => {
 
             <Button
               className="mt-6 w-full block bg-indigo-600 hover:bg-indigo-500"
-              disabled={true}
-              //maybe in the future for now I don't have Stripe account
-              // disabled={loading || isPending}
-              // onClick={handleUpgrade}
+              disabled
             >
               {proPlanButtonText}
             </Button>
@@ -112,10 +89,10 @@ const PricingPage = () => {
               role="list"
               className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
             >
-              {PRO_FEATURES.map((feat) => (
-                <li className="flex gap-x-3" key={feat}>
+              {PRICING_PRO_FEATURES.map((feature) => (
+                <li className="flex gap-x-3" key={feature}>
                   <CheckIcon className="h-6 w-5 flex-none text-indigo-600" />
-                  {feat}
+                  {feature}
                 </li>
               ))}
             </ul>

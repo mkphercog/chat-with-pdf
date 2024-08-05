@@ -31,7 +31,7 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
       >
         <p className="font-semibold line-clamp-2">{name}</p>
         <p className="text-sm text-gray-500 group-hover:text-indigo-100">
-          {byteSize(size).value} KB
+          {byteSize(size).toString()}
         </p>
       </div>
 

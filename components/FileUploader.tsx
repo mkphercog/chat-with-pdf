@@ -13,7 +13,10 @@ import useUpload, { StatusText } from "@/hooks/useUpload";
 import { useRouter } from "next/navigation";
 import useSubscription from "@/hooks/useSubscription";
 import { useToast } from "./ui/use-toast";
-import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants";
+import {
+  FREE_FILE_MAX_SIZE_IN_BYTES,
+  FREE_FILE_MAX_SIZE_IN_KB,
+} from "@/constants";
 import { ROUTES } from "@/routes";
 
 const FileUploader = () => {
@@ -32,11 +35,11 @@ const FileUploader = () => {
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
 
-      if (file?.size >= FILE_MAX_SIZE_IN_BYTES) {
+      if (file?.size >= FREE_FILE_MAX_SIZE_IN_BYTES) {
         toast({
           variant: "destructive",
           title: "File to big",
-          description: `Max size ${FILE_MAX_SIZE_IN_KB} KB.`,
+          description: `Max size ${FREE_FILE_MAX_SIZE_IN_KB} KB.`,
         });
         return;
       }
@@ -136,7 +139,7 @@ const FileUploader = () => {
                 <CircleArrowDown className="h-20 w-20 animate-bounce" />
                 <p>
                   Drag &apos;n&apos; drop some file here, or click to select
-                  file, max file size {FILE_MAX_SIZE_IN_KB} KB
+                  file, max file size {FREE_FILE_MAX_SIZE_IN_KB}
                 </p>
               </>
             )}
