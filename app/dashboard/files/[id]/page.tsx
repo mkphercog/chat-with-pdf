@@ -1,8 +1,8 @@
+import { FC } from "react";
+import { protectedUserId } from "@/actions/protectedUserId";
 import Chat from "@/components/Chat";
 import PdfView from "@/components/PdfView";
 import { adminDb } from "@/firebaseAdmin";
-import { auth } from "@clerk/nextjs/server";
-import { FC } from "react";
 
 type ChatToFilePageProps = {
   params: {
@@ -11,12 +11,7 @@ type ChatToFilePageProps = {
 };
 
 const ChatToFilePage: FC<ChatToFilePageProps> = async ({ params: { id } }) => {
-  auth().protect();
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not found!");
-  }
+  const { userId } = await protectedUserId();
 
   const ref = await adminDb
     .collection("users")

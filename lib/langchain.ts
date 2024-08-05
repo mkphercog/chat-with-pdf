@@ -9,10 +9,9 @@ import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retr
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import pineconeClient from "./pinecone";
 import { PineconeStore } from "@langchain/pinecone";
-import { PineconeConflictError } from "@pinecone-database/pinecone/dist/errors";
 import { Index, RecordMetadata } from "@pinecone-database/pinecone";
 import { adminDb } from "@/firebaseAdmin";
-import { auth } from "@clerk/nextjs/server";
+import { protectedUserId } from "@/actions/protectedUserId";
 
 const model = new ChatOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,11 +21,7 @@ const model = new ChatOpenAI({
 export const indexName = "chat-with-pdf";
 
 const fetchMessagesFromDB = async (docId: string) => {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not found!");
-  }
+  const { userId } = await protectedUserId();
 
   console.log("--- Fetching chat history from firestore database");
 
@@ -53,11 +48,7 @@ const fetchMessagesFromDB = async (docId: string) => {
 };
 
 const generateDocs = async (docId: string) => {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not found!");
-  }
+  const { userId } = await protectedUserId();
 
   console.log("--- Fetching the download URL from Firebase ---");
 
@@ -103,11 +94,7 @@ const namespaceExists = async (
 export const generateEmbeddingsInPineconeVectorStore = async (
   docId: string
 ) => {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not found!");
-  }
+  protectedUserId();
 
   let pineconeVectorStore;
 

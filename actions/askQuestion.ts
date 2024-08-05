@@ -4,15 +4,14 @@ import { Message } from "@/components/Chat";
 import { FREE_MESSAGES_LIMIT, PRO_MESSAGES_LIMIT } from "@/constants";
 import { adminDb } from "@/firebaseAdmin";
 import { generateLangchainCompletion } from "@/lib/langchain";
-import { auth } from "@clerk/nextjs/server";
+import { protectedUserId } from "./protectedUserId";
 
 export const askQuestion = async (id: string, question: string) => {
-  auth().protect();
-  const { userId } = auth();
+  const { userId } = await protectedUserId();
 
   const chatRef = adminDb
     .collection("users")
-    .doc(userId!)
+    .doc(userId)
     .collection("files")
     .doc(id)
     .collection("chat");
@@ -21,7 +20,7 @@ export const askQuestion = async (id: string, question: string) => {
     (doc) => doc.data().role === "human"
   );
 
-  const userRef = await adminDb.collection("users").doc(userId!).get();
+  const userRef = await adminDb.collection("users").doc(userId).get();
   if (!userRef.data()?.hasActiveMembership) {
     if (userMessages.length >= FREE_MESSAGES_LIMIT) {
       return {

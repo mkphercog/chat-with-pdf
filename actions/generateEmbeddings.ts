@@ -2,11 +2,11 @@
 
 import { generateEmbeddingsInPineconeVectorStore } from "@/lib/langchain";
 import { ROUTES } from "@/routes";
-import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { protectedUserId } from "./protectedUserId";
 
 export const generateEmbeddings = async (docId: string) => {
-  auth().protect();
+  await protectedUserId();
 
   await generateEmbeddingsInPineconeVectorStore(docId);
 

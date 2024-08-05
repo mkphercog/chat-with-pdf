@@ -1,15 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
 import PlaceholderDocument from "./PlaceholderDocument";
 import { adminDb } from "@/firebaseAdmin";
 import Document from "./Document";
+import { protectedUserId } from "@/actions/protectedUserId";
 
 const Documents = async () => {
-  auth().protect();
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not found!");
-  }
+  const { userId } = await protectedUserId();
 
   const documentsSnapshot = await adminDb
     .collection("users")
