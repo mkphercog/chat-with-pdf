@@ -1,7 +1,7 @@
 import AuthClerkIntoFirebase from "@/components/AuthClerkIntoFirebase";
 import Documents from "@/components/Documents";
 
-import { FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants/plans";
+import { FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants";
 import { adminDb } from "@/firebaseAdmin";
 import { auth } from "@clerk/nextjs/server";
 

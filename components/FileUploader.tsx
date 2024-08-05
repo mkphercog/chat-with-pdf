@@ -13,7 +13,7 @@ import useUpload, { StatusText } from "@/hooks/useUpload";
 import { useRouter } from "next/navigation";
 import useSubscription from "@/hooks/useSubscription";
 import { useToast } from "./ui/use-toast";
-import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants/plans";
+import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants";
 import { ROUTES } from "@/routes";
 
 function FileUploader() {

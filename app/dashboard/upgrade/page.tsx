@@ -9,7 +9,7 @@ import {
   FREE_MESSAGES_LIMIT,
   PRO_DOC_LIMIT,
   PRO_MESSAGES_LIMIT,
-} from "@/constants/plans";
+} from "@/constants";
 
 import "./page.css";
 

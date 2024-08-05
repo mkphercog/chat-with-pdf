@@ -1,6 +1,6 @@
 "use client";
 
-import { FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants/plans";
+import { FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants";
 import { db } from "@/firebase";
 import { useUser } from "@clerk/nextjs";
 import { collection, doc } from "firebase/firestore";

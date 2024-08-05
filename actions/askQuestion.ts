@@ -1,7 +1,7 @@
 "use server";
 
 import { Message } from "@/components/Chat";
-import { FREE_MESSAGES_LIMIT, PRO_MESSAGES_LIMIT } from "@/constants/plans";
+import { FREE_MESSAGES_LIMIT, PRO_MESSAGES_LIMIT } from "@/constants";
 import { adminDb } from "@/firebaseAdmin";
 import { generateLangchainCompletion } from "@/lib/langchain";
 import { auth } from "@clerk/nextjs/server";

@@ -19,7 +19,7 @@ export default function RootLayout({
       signInFallbackRedirectUrl={ROUTES.dashboard.root()}
     >
       <html lang="en">
-        <body className="min-h-svh h-svh overflow-auto flex flex-col">
+        <body className="min-h-max h-max overflow-auto flex flex-col">
           <Toaster />
           {children}
         </body>
