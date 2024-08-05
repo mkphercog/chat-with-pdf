@@ -16,7 +16,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
       signInFallbackRedirectUrl={ROUTES.dashboard.root()}
     >
       <html lang="en">
-        <body className="min-h-screen h-screen overflow-auto flex flex-col">
+        <body className="min-h-screen overflow-auto flex flex-col">
           <Toaster />
           {children}
         </body>

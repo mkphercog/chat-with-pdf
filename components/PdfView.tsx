@@ -6,7 +6,14 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { Document, Page, pdfjs } from "react-pdf";
 import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Loader2Icon, RotateCw, ZoomInIcon, ZoomOutIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Loader2Icon,
+  RotateCw,
+  ZoomInIcon,
+  ZoomOutIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/routes";
 
@@ -57,7 +64,7 @@ const PdfView: FC<PdfViewProps> = ({ url }) => {
               }
             }}
           >
-            Previous
+            <ArrowLeft />
           </Button>
           <p className="flex items-center justify-center">
             {pageNumber} of {numPages}
@@ -73,7 +80,7 @@ const PdfView: FC<PdfViewProps> = ({ url }) => {
               }
             }}
           >
-            Next
+            <ArrowRight />
           </Button>
 
           <Button
