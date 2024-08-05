@@ -4,6 +4,7 @@ import { FrownIcon, PlusCircleIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import useSubscription from "@/hooks/useSubscription";
+import { ROUTES } from "@/routes";
 
 function PlaceholderDocument() {
   const { isOverFileLimit } = useSubscription();
@@ -11,9 +12,9 @@ function PlaceholderDocument() {
 
   const handleClick = () => {
     if (isOverFileLimit) {
-      router.push("dashboard/upgrade");
+      router.push(ROUTES.dashboard.pricing());
     } else {
-      router.push("/dashboard/upload");
+      router.push(ROUTES.dashboard.uploadFile());
     }
   };
 

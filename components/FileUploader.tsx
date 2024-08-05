@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import useSubscription from "@/hooks/useSubscription";
 import { useToast } from "./ui/use-toast";
 import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants/plans";
+import { ROUTES } from "@/routes";
 
 function FileUploader() {
   const { progress, status, fileId, handleUpload } = useUpload();
@@ -23,7 +24,7 @@ function FileUploader() {
 
   useEffect(() => {
     if (fileId) {
-      router.push(`/dashboard/files/${fileId}`);
+      router.push(ROUTES.dashboard.fileView(fileId));
     }
   }, [fileId, router]);
 

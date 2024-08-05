@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/routes";
 import { currentUser } from "@clerk/nextjs/server";
 import {
   BrainCogIcon,
@@ -83,7 +84,7 @@ export default async function Home() {
             <p className="text-3xl font-bold mt-10 text-indigo-600">{`Weclome, ${user?.firstName}!`}</p>
           )}
           <Button asChild className="mt-8">
-            <Link href="/dashboard">
+            <Link href={ROUTES.dashboard.root()}>
               {user?.id ? "Go to dashboard" : "Get started"}
             </Link>
           </Button>

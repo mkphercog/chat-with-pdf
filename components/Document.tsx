@@ -7,6 +7,7 @@ import { useTransition } from "react";
 import { Button } from "./ui/button";
 import { DownloadCloud, Trash2Icon } from "lucide-react";
 import deleteDocument from "@/actions/deleteDocument";
+import { ROUTES } from "@/routes";
 
 function Document({
   id,
@@ -28,7 +29,7 @@ function Document({
       <div
         className="flex-1"
         onClick={() => {
-          router.push(`/dashboard/files/${id}`);
+          router.push(ROUTES.dashboard.fileView(id));
         }}
       >
         <p className="font-semibold line-clamp-2">{name}</p>

@@ -5,13 +5,14 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Loader2Icon, StarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/routes";
 
 function UpgradeButton() {
   const { hasActiveMembership, loading } = useSubscription();
   const router = useRouter();
 
   const goToPricingPage = () => {
-    router.push("/dashboard/upgrade");
+    router.push(ROUTES.dashboard.pricing());
   };
 
   if (!hasActiveMembership && !loading)
@@ -21,7 +22,7 @@ function UpgradeButton() {
         variant="default"
         className="border-indigo-600 md:inline-flex"
       >
-        <Link href={"/dashboard/upgrade"}>
+        <Link href={ROUTES.dashboard.pricing()}>
           Upgrade <StarIcon className="ml-3 fill-indigo-600 text-white" />
         </Link>
       </Button>

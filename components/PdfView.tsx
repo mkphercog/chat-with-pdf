@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2Icon, RotateCw, ZoomInIcon, ZoomOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/routes";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -21,7 +22,7 @@ function PdfView({ url }: { url: string }) {
 
   useEffect(() => {
     if (!url) {
-      router.push("/dashboard");
+      router.push(ROUTES.dashboard.root());
       return;
     }
 
