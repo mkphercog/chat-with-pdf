@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LANDING_PAGE_FEATURES, LANDING_PAGE_IMAGE } from "@/constants";
 import { ROUTES } from "@/routes";
 
-export default async function Home() {
+const Home = async () => {
   const user = await currentUser();
 
   return (
@@ -70,4 +70,5 @@ export default async function Home() {
       </div>
     </main>
   );
-}
+};
+export default Home;

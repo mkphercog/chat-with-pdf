@@ -2,19 +2,25 @@ import Chat from "@/components/Chat";
 import PdfView from "@/components/PdfView";
 import { adminDb } from "@/firebaseAdmin";
 import { auth } from "@clerk/nextjs/server";
+import { FC } from "react";
 
-async function ChatToFilePage({
-  params: { id },
-}: {
+type ChatToFilePageProps = {
   params: {
     id: string;
   };
-}) {
+};
+
+const ChatToFilePage: FC<ChatToFilePageProps> = async ({ params: { id } }) => {
   auth().protect();
-  const { userId } = await auth();
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not found!");
+  }
+
   const ref = await adminDb
     .collection("users")
-    .doc(userId!)
+    .doc(userId)
     .collection("files")
     .doc(id)
     .get();
@@ -30,5 +36,5 @@ async function ChatToFilePage({
       </div>
     </div>
   );
-}
+};
 export default ChatToFilePage;

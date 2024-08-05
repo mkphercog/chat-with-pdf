@@ -5,8 +5,13 @@ import Image from "next/image";
 import { BotIcon, Loader2Icon } from "lucide-react";
 import Markdown from "react-markdown";
 import { Message } from "./Chat";
+import { FC } from "react";
 
-function ChatMessage({ message }: { message: Message }) {
+type ChatMessageProps = {
+  message: Message;
+};
+
+const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
   const isHuman = message.role === "human";
   const { user } = useUser();
 
@@ -49,5 +54,5 @@ function ChatMessage({ message }: { message: Message }) {
       </div>
     </div>
   );
-}
+};
 export default ChatMessage;

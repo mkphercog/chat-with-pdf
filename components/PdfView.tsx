@@ -4,7 +4,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 import { Document, Page, pdfjs } from "react-pdf";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2Icon, RotateCw, ZoomInIcon, ZoomOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,11 @@ import { ROUTES } from "@/routes";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-function PdfView({ url }: { url: string }) {
+type PdfViewProps = {
+  url: string;
+};
+
+const PdfView: FC<PdfViewProps> = ({ url }) => {
   const [numPages, setNumPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [file, setFile] = useState<Blob | null>(null);
@@ -116,5 +120,5 @@ function PdfView({ url }: { url: string }) {
       )}
     </div>
   );
-}
+};
 export default PdfView;

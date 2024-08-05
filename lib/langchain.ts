@@ -22,7 +22,7 @@ const model = new ChatOpenAI({
 export const indexName = "chat-with-pdf";
 
 const fetchMessagesFromDB = async (docId: string) => {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) {
     throw new Error("User not found!");
@@ -53,7 +53,7 @@ const fetchMessagesFromDB = async (docId: string) => {
 };
 
 const generateDocs = async (docId: string) => {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) {
     throw new Error("User not found!");
@@ -103,7 +103,7 @@ const namespaceExists = async (
 export const generateEmbeddingsInPineconeVectorStore = async (
   docId: string
 ) => {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) {
     throw new Error("User not found!");
@@ -114,7 +114,7 @@ export const generateEmbeddingsInPineconeVectorStore = async (
   console.log("--- Generating embeddings... ---");
   const embeddings = new OpenAIEmbeddings();
 
-  const index = await pineconeClient.index(indexName);
+  const index = pineconeClient.index(indexName);
   const namespaceAlreadyExists = await namespaceExists(index, docId);
 
   if (namespaceAlreadyExists) {

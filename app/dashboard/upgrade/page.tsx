@@ -27,7 +27,7 @@ const PRO_FEATURES = [
   "Advanced analitics",
 ];
 
-function PricingPage() {
+const PricingPage = () => {
   const { hasActiveMembership, loading } = useSubscription();
 
   const proPlanButtonText = loading
@@ -124,5 +124,5 @@ function PricingPage() {
       </div>
     </div>
   );
-}
+};
 export default PricingPage;

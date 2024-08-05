@@ -3,23 +3,20 @@
 import { useRouter } from "next/navigation";
 import byteSize from "byte-size";
 import useSubscription from "@/hooks/useSubscription";
-import { useTransition } from "react";
+import { FC, useTransition } from "react";
 import { Button } from "./ui/button";
 import { DownloadCloud, Trash2Icon } from "lucide-react";
 import deleteDocument from "@/actions/deleteDocument";
 import { ROUTES } from "@/routes";
 
-function Document({
-  id,
-  name,
-  size,
-  downloadUrl,
-}: {
+type DocumentProps = {
   id: string;
   name: string;
   size: number;
   downloadUrl: string;
-}) {
+};
+
+const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
   const router = useRouter();
   const [isDeleting, startTransition] = useTransition();
   const { hasActiveMembership } = useSubscription();
@@ -67,5 +64,5 @@ function Document({
       </div>
     </div>
   );
-}
+};
 export default Document;

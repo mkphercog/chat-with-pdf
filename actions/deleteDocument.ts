@@ -39,7 +39,7 @@ const deleteDocument = async (docId: string) => {
     .delete();
 
   try {
-    const index = await pineconeClient.index(indexName);
+    const index = pineconeClient.index(indexName);
     await index.namespace(docId).deleteAll();
   } catch (error) {
     console.error(error);

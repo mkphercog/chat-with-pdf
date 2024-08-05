@@ -1,6 +1,13 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
+import {
+  FC,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useUser } from "@clerk/nextjs";
@@ -19,7 +26,11 @@ export type Message = {
   createdAt: Date;
 };
 
-function Chat({ id }: { id: string }) {
+type ChatProps = {
+  id: string;
+};
+
+const Chat: FC<ChatProps> = ({ id }) => {
   const { user } = useUser();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -153,5 +164,5 @@ function Chat({ id }: { id: string }) {
       </form>
     </div>
   );
-}
+};
 export default Chat;

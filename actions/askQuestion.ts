@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export const askQuestion = async (id: string, question: string) => {
   auth().protect();
-  const { userId } = await auth();
+  const { userId } = auth();
 
   const chatRef = adminDb
     .collection("users")

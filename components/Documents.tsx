@@ -3,9 +3,9 @@ import PlaceholderDocument from "./PlaceholderDocument";
 import { adminDb } from "@/firebaseAdmin";
 import Document from "./Document";
 
-async function Documents() {
+const Documents = async () => {
   auth().protect();
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) {
     throw new Error("User not found!");
@@ -35,5 +35,5 @@ async function Documents() {
       <PlaceholderDocument />
     </div>
   );
-}
+};
 export default Documents;

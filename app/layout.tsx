@@ -3,16 +3,13 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import { ROUTES } from "@/routes";
+import { FC, PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
   title: "Chat with PDF",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ClerkProvider
       afterSignOutUrl={ROUTES.home.root()}
@@ -26,4 +23,5 @@ export default function RootLayout({
       </html>
     </ClerkProvider>
   );
-}
+};
+export default RootLayout;

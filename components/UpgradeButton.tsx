@@ -7,7 +7,7 @@ import { Loader2Icon, StarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/routes";
 
-function UpgradeButton() {
+const UpgradeButton = () => {
   const { hasActiveMembership, loading } = useSubscription();
   const router = useRouter();
 
@@ -46,5 +46,5 @@ function UpgradeButton() {
       </p>
     </Button>
   );
-}
+};
 export default UpgradeButton;

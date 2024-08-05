@@ -4,7 +4,7 @@ import { auth as firebaseAuth } from "@/firebase";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { signInWithCustomToken, signOut } from "firebase/auth";
 
-function AuthClerkIntoFirebase() {
+const AuthClerkIntoFirebase = () => {
   const { getToken } = useAuth();
   const { addListener } = useClerk();
 
@@ -18,5 +18,5 @@ function AuthClerkIntoFirebase() {
   });
 
   return null;
-}
+};
 export default AuthClerkIntoFirebase;

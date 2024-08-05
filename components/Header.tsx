@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ROUTES } from "@/routes";
 
-function Header() {
+const Header = () => {
   return (
     <div className="flex justify-between sticky top-0 left-0 z-50 bg-white shadow-sm p-5 border-b">
       <Link href={ROUTES.home.root()} className="text-2xl">
@@ -64,5 +64,5 @@ function Header() {
       </SignedIn>
     </div>
   );
-}
+};
 export default Header;

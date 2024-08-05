@@ -7,8 +7,8 @@ import { auth } from "@clerk/nextjs/server";
 
 export const dynamic = "force-dynamic";
 
-async function Dashboard() {
-  const { userId } = await auth();
+const Dashboard = async () => {
+  const { userId } = auth();
   const userDocs = await adminDb
     .collection("users")
     .doc(userId!)
@@ -32,5 +32,5 @@ async function Dashboard() {
       <Documents />
     </div>
   );
-}
+};
 export default Dashboard;

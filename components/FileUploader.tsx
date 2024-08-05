@@ -16,7 +16,7 @@ import { useToast } from "./ui/use-toast";
 import { FILE_MAX_SIZE_IN_BYTES, FILE_MAX_SIZE_IN_KB } from "@/constants";
 import { ROUTES } from "@/routes";
 
-function FileUploader() {
+const FileUploader = () => {
   const { progress, status, fileId, handleUpload } = useUpload();
   const { isOverFileLimit, filesLoading } = useSubscription();
   const { toast } = useToast();
@@ -145,5 +145,5 @@ function FileUploader() {
       )}
     </div>
   );
-}
+};
 export default FileUploader;
