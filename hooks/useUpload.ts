@@ -2,7 +2,7 @@
 
 import { generateEmbeddings } from "@/actions/generateEmbeddings";
 import { useToast } from "@/components/ui/use-toast";
-import { FB_COLL, SUCCESS_TOAST_STYLES } from "@/constants";
+import { FB_COLL } from "@/constants";
 import { db, storage } from "@/firebase";
 import { useUser } from "@clerk/nextjs";
 import { doc, setDoc } from "firebase/firestore";
