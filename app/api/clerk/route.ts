@@ -8,14 +8,25 @@ export async function POST(request: Request) {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  const payload: WebhookEvent = await request.json();
+  try {
+    const payload: WebhookEvent = await request.json();
 
-  if (!payload.data?.id)
-    return new Response("Invalid Payload", { status: 400 });
+    console.log("Received payload:", payload);
 
-  if (payload.type === "user.deleted") {
-    await deleteFilesWithAccount(payload.data.id);
+    if (!payload.data || !payload.data.id) {
+      console.error("Invalid payload:", payload);
+      return new Response("Invalid Payload", { status: 400 });
+    }
+
+    if (payload.type === "user.deleted") {
+      await deleteFilesWithAccount(payload.data.id);
+    }
+
+    return new Response(JSON.stringify({ message: "Received" }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    return new Response("Internal Server Error", { status: 500 });
   }
-
-  return new Response(JSON.stringify({ message: "Received" }), { status: 200 });
 }
