@@ -23,7 +23,7 @@ const deleteDocument = async (docId: string) => {
       .collection(FB_COLL.chat)
       .listDocuments()
       .then((docs) => {
-        docs.map((doc) => doc.delete());
+        docs.map(async (doc) => await doc.delete());
       });
   }
 

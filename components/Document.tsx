@@ -20,7 +20,6 @@ import {
   AlertDialogAction,
 } from "./ui/alert-dialog";
 import { useToast } from "./ui/use-toast";
-import { SUCCESS_TOAST_STYLES } from "@/constants";
 
 type DocumentProps = {
   id: string;
@@ -40,8 +39,7 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
       startTransition(async () => {
         await deleteDocument(id);
         toast({
-          variant: "default",
-          className: SUCCESS_TOAST_STYLES,
+          variant: "success",
           title: "Success!",
           description: `File "${name}" deleted correctly.`,
         });

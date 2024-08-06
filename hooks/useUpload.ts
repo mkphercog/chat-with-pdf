@@ -81,8 +81,7 @@ const useUpload = () => {
   useEffect(() => {
     if (status === StatusText.DONE) {
       toast({
-        variant: "default",
-        className: SUCCESS_TOAST_STYLES,
+        variant: "success",
         title: "Success!",
         description: `File "${fileName}" uploaded correctly.`,
       });

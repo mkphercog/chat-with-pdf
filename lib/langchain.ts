@@ -24,7 +24,7 @@ export const indexName = "chat-with-pdf";
 const fetchMessagesFromDB = async (docId: string) => {
   const { userId } = await protectedUserId();
 
-  console.log("--- Fetching chat history from firestore database");
+  console.info("--- Fetching chat history from firestore database");
 
   const chats = await adminDb
     .collection(FB_COLL.users)
@@ -42,8 +42,8 @@ const fetchMessagesFromDB = async (docId: string) => {
       : new AIMessage(doc.data().message)
   );
 
-  console.log(`--- Fetched last ${chatHistory.length} messages successfully`);
-  console.log(chatHistory.map((msg) => msg.content.toString()));
+  console.info(`--- Fetched last ${chatHistory.length} messages successfully`);
+  console.info(chatHistory.map((msg) => msg.content.toString()));
 
   return chatHistory;
 };
@@ -51,7 +51,7 @@ const fetchMessagesFromDB = async (docId: string) => {
 const generateDocs = async (docId: string) => {
   const { userId } = await protectedUserId();
 
-  console.log("--- Fetching the download URL from Firebase ---");
+  console.info("--- Fetching the download URL from Firebase ---");
 
   const firebaseRef = await adminDb
     .collection(FB_COLL.users)
@@ -65,20 +65,20 @@ const generateDocs = async (docId: string) => {
     throw new Error("Download URL not found!");
   }
 
-  console.log(`--- Download URL fetched successfully: ${downloadUrl} ---`);
+  console.info(`--- Download URL fetched successfully: ${downloadUrl} ---`);
 
   const response = await fetch(downloadUrl);
   const data = await response.blob();
 
-  console.log("--- Loading PDF document ---");
+  console.info("--- Loading PDF document ---");
   const loader = new PDFLoader(data);
   const docs = await loader.load();
 
-  console.log("--- Splitting the document into smaller parts ---");
+  console.info("--- Splitting the document into smaller parts ---");
   const splitter = new RecursiveCharacterTextSplitter();
 
   const splitDocs = await splitter.splitDocuments(docs);
-  console.log(`--- Split into ${splitDocs.length} parts ---`);
+  console.info(`--- Split into ${splitDocs.length} parts ---`);
 
   return splitDocs;
 };
@@ -99,14 +99,14 @@ export const generateEmbeddingsInPineconeVectorStore = async (
 
   let pineconeVectorStore;
 
-  console.log("--- Generating embeddings... ---");
+  console.info("--- Generating embeddings... ---");
   const embeddings = new OpenAIEmbeddings();
 
   const index = pineconeClient.index(indexName);
   const namespaceAlreadyExists = await namespaceExists(index, docId);
 
   if (namespaceAlreadyExists) {
-    console.log(`--- Namespace ${docId} already exists! ---`);
+    console.info(`--- Namespace ${docId} already exists! ---`);
 
     pineconeVectorStore = await PineconeStore.fromExistingIndex(embeddings, {
       pineconeIndex: index,
@@ -117,7 +117,7 @@ export const generateEmbeddingsInPineconeVectorStore = async (
   } else {
     const splitDocs = await generateDocs(docId);
 
-    console.log(
+    console.info(
       `--- Storing the embeddings in namespace ${docId} in the ${indexName} Pinecone vector store ---`
     );
 
@@ -143,12 +143,12 @@ const generateLangchainCompletion = async (docId: string, question: string) => {
     throw new Error("Pinecone vector store not found!");
   }
 
-  console.log("--- Creating a retriever ---");
+  console.info("--- Creating a retriever ---");
   const retriever = pineconeVectorStore.asRetriever();
 
   const chatHistory = await fetchMessagesFromDB(docId);
 
-  console.log("--- Defining a prompt template ---");
+  console.info("--- Defining a prompt template ---");
   const historyAwarePrompt = ChatPromptTemplate.fromMessages([
     ...chatHistory,
 
@@ -159,14 +159,14 @@ const generateLangchainCompletion = async (docId: string, question: string) => {
     ],
   ]);
 
-  console.log("--- Creating a history-aware retriever chain ---");
+  console.info("--- Creating a history-aware retriever chain ---");
   const historyAwareRetrieverChain = await createHistoryAwareRetriever({
     llm: model,
     retriever,
     rephrasePrompt: historyAwarePrompt,
   });
 
-  console.log("--- Defining a prompt template for answering question ---");
+  console.info("--- Defining a prompt template for answering question ---");
   const historyAwareRetrieverPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
@@ -177,25 +177,25 @@ const generateLangchainCompletion = async (docId: string, question: string) => {
     ["user", "{input}"],
   ]);
 
-  console.log("--- Creating a document combining chain ---");
+  console.info("--- Creating a document combining chain ---");
   const historyAwareCombineDocsChain = await createStuffDocumentsChain({
     llm: model,
     prompt: historyAwareRetrieverPrompt,
   });
 
-  console.log("--- Creating a main retriever chain ---");
+  console.info("--- Creating a main retriever chain ---");
   const conversationalRetrievalChain = await createRetrievalChain({
     retriever: historyAwareRetrieverChain,
     combineDocsChain: historyAwareCombineDocsChain,
   });
 
-  console.log("--- Running the chain with a sample conversation ---");
+  console.info("--- Running the chain with a sample conversation ---");
   const reply = await conversationalRetrievalChain.invoke({
     chat_history: chatHistory,
     input: question,
   });
 
-  console.log(`--- Reply: ${reply.answer}`);
+  console.info(`--- Reply: ${reply.answer}`);
   return reply.answer;
 };
 
