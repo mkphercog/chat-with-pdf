@@ -1,7 +1,7 @@
 "use server";
 
 import { FB_COLL } from "@/constants";
-import { adminDb, adminStorage } from "@/firebaseAdmin";
+import { adminDb, adminStorage, adminAuth } from "@/firebaseAdmin";
 import { indexName } from "@/lib/langchain";
 import pineconeClient from "@/lib/pinecone";
 
@@ -47,5 +47,7 @@ const deleteFilesWithAccount = async (userId: string) => {
 
   console.info(`--- Deleting user ${userId} from DB ---"`);
   await userRef.delete();
+  console.info(`--- Deleting user ${userId} from Firebase auth ---"`);
+  await adminAuth.deleteUser(userId);
 };
 export default deleteFilesWithAccount;
