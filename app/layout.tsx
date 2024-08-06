@@ -11,10 +11,7 @@ export const metadata: Metadata = {
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <ClerkProvider
-      afterSignOutUrl={ROUTES.home.root()}
-      signInForceRedirectUrl={ROUTES.dashboard.root()}
-    >
+    <ClerkProvider afterSignOutUrl={ROUTES.home.root()}>
       <html lang="en">
         <body className="min-h-screen overflow-auto flex flex-col">
           <Toaster />
