@@ -39,7 +39,7 @@ const Home = async () => {
             <p className="text-3xl font-bold mt-10 text-indigo-600">{`Welcome, ${user?.firstName}!`}</p>
           )}
           <Button asChild className="mt-8">
-            <Link href={ROUTES.dashboard.root()}>
+            <Link prefetch={false} href={ROUTES.dashboard.root()}>
               {user?.id ? "Go to dashboard" : "Get started"}
             </Link>
           </Button>
@@ -52,6 +52,7 @@ const Home = async () => {
               src={LANDING_PAGE_IMAGE}
               width={2432}
               height={1442}
+              priority
               className="mb-[-0%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"
             />
             <div aria-hidden="true" className="relative">
