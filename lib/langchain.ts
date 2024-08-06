@@ -12,6 +12,7 @@ import { PineconeStore } from "@langchain/pinecone";
 import { Index, RecordMetadata } from "@pinecone-database/pinecone";
 import { adminDb } from "@/firebaseAdmin";
 import { protectedUserId } from "@/actions/protectedUserId";
+import { FB_COLL } from "@/constants";
 
 const model = new ChatOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -26,11 +27,11 @@ const fetchMessagesFromDB = async (docId: string) => {
   console.log("--- Fetching chat history from firestore database");
 
   const chats = await adminDb
-    .collection("users")
+    .collection(FB_COLL.users)
     .doc(userId)
-    .collection("files")
+    .collection(FB_COLL.files)
     .doc(docId)
-    .collection("chat")
+    .collection(FB_COLL.chat)
     .orderBy("createdAt", "desc")
     // .limit(LIMIT)
     .get();
@@ -53,9 +54,9 @@ const generateDocs = async (docId: string) => {
   console.log("--- Fetching the download URL from Firebase ---");
 
   const firebaseRef = await adminDb
-    .collection("users")
+    .collection(FB_COLL.users)
     .doc(userId)
-    .collection("files")
+    .collection(FB_COLL.files)
     .doc(docId)
     .get();
   const downloadUrl = firebaseRef.data()?.downloadUrl;

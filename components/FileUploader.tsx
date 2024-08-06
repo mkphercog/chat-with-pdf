@@ -8,6 +8,7 @@ import {
   HammerIcon,
   RocketIcon,
   SaveIcon,
+  FileCheck2,
 } from "lucide-react";
 import useUpload, { StatusText } from "@/hooks/useUpload";
 import { useRouter } from "next/navigation";
@@ -15,15 +16,27 @@ import useSubscription from "@/hooks/useSubscription";
 import { useToast } from "./ui/use-toast";
 import {
   FREE_FILE_MAX_SIZE_IN_BYTES,
+  PRO_FILE_MAX_SIZE_IN_BYTES,
   FREE_FILE_MAX_SIZE_IN_KB,
+  PRO_FILE_MAX_SIZE_IN_KB,
 } from "@/constants";
 import { ROUTES } from "@/routes";
 
 const FileUploader = () => {
+  const { hasActiveMembership } = useSubscription();
   const { progress, status, fileId, handleUpload } = useUpload();
   const { isOverFileLimit, filesLoading } = useSubscription();
   const { toast } = useToast();
   const router = useRouter();
+  const fileSizeLimit = hasActiveMembership
+    ? {
+        bytes: PRO_FILE_MAX_SIZE_IN_BYTES,
+        kb: PRO_FILE_MAX_SIZE_IN_KB,
+      }
+    : {
+        bytes: FREE_FILE_MAX_SIZE_IN_BYTES,
+        kb: FREE_FILE_MAX_SIZE_IN_KB,
+      };
 
   useEffect(() => {
     if (fileId) {
@@ -35,11 +48,11 @@ const FileUploader = () => {
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
 
-      if (file?.size >= FREE_FILE_MAX_SIZE_IN_BYTES) {
+      if (file?.size >= fileSizeLimit.bytes) {
         toast({
           variant: "destructive",
           title: "File to big",
-          description: `Max size ${FREE_FILE_MAX_SIZE_IN_KB} KB.`,
+          description: `Max size ${fileSizeLimit.kb}.`,
         });
         return;
       }
@@ -50,9 +63,9 @@ const FileUploader = () => {
         } else {
           toast({
             variant: "destructive",
-            title: "Free Plan File Limit Reached",
+            title: "Free account detected",
             description:
-              "You have reached the maximum number of files allowed for your account. Please upgrade to add more documents.",
+              "You have reached the maximum number of files allowed for your account. Please upgrade to PRO to add more documents.",
           });
         }
       } else {
@@ -63,7 +76,14 @@ const FileUploader = () => {
         });
       }
     },
-    [filesLoading, handleUpload, isOverFileLimit, toast]
+    [
+      fileSizeLimit.bytes,
+      fileSizeLimit.kb,
+      filesLoading,
+      handleUpload,
+      isOverFileLimit,
+      toast,
+    ]
   );
 
   const statusIcons: {
@@ -78,6 +98,9 @@ const FileUploader = () => {
     [StatusText.SAVING]: <SaveIcon className="h-20 w-20 text-indigo-600" />,
     [StatusText.GENERATING]: (
       <HammerIcon className="h-20 w-20 text-indigo-600 animate-pulse" />
+    ),
+    [StatusText.DONE]: (
+      <FileCheck2 className="h-20 w-20 text-indigo-600 animate-accordion-down" />
     ),
   };
 
@@ -139,7 +162,7 @@ const FileUploader = () => {
                 <CircleArrowDown className="h-20 w-20 animate-bounce" />
                 <p>
                   Drag &apos;n&apos; drop some file here, or click to select
-                  file, max file size {FREE_FILE_MAX_SIZE_IN_KB}
+                  file, max file size {fileSizeLimit.kb}
                 </p>
               </>
             )}

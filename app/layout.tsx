@@ -13,7 +13,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ClerkProvider
       afterSignOutUrl={ROUTES.home.root()}
-      signInFallbackRedirectUrl={ROUTES.dashboard.root()}
+      signInForceRedirectUrl={ROUTES.dashboard.root()}
     >
       <html lang="en">
         <body className="min-h-screen overflow-auto flex flex-col">

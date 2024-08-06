@@ -6,31 +6,32 @@ import pineconeClient from "@/lib/pinecone";
 import { ROUTES } from "@/routes";
 import { revalidatePath } from "next/cache";
 import { protectedUserId } from "./protectedUserId";
+import { FB_COLL } from "@/constants";
 
 const deleteDocument = async (docId: string) => {
   const { userId } = await protectedUserId();
 
-  await adminDb
-    .collection("users")
+  const currentDoc = adminDb
+    .collection(FB_COLL.users)
     .doc(userId)
-    .collection("files")
-    .doc(docId)
-    .collection("chat")
-    .listDocuments()
-    .then((docs) => {
-      docs.map((doc) => doc.delete());
-    });
+    .collection(FB_COLL.files)
+    .doc(docId);
+  const hasChat = await currentDoc.collection(FB_COLL.chat).get();
 
-  await adminDb
-    .collection("users")
-    .doc(userId)
-    .collection("files")
-    .doc(docId)
-    .delete();
+  if (hasChat.docs.length) {
+    await currentDoc
+      .collection(FB_COLL.chat)
+      .listDocuments()
+      .then((docs) => {
+        docs.map((doc) => doc.delete());
+      });
+  }
+
+  await currentDoc.delete();
 
   await adminStorage
     .bucket(process.env.FIREBASE_STORAGE_BUCKET)
-    .file(`users/${userId}/files/${docId}`)
+    .file(`${FB_COLL.users}/${userId}/${FB_COLL.files}/${docId}`)
     .delete();
 
   try {

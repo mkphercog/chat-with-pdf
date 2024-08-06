@@ -18,6 +18,7 @@ import { db } from "@/firebase";
 import { askQuestion } from "@/actions/askQuestion";
 import ChatMessage from "./ChatMessage";
 import { useToast } from "./ui/use-toast";
+import { FB_COLL } from "@/constants";
 
 export type Message = {
   id?: string;
@@ -27,10 +28,10 @@ export type Message = {
 };
 
 type ChatProps = {
-  id: string;
+  docId: string;
 };
 
-const Chat: FC<ChatProps> = ({ id }) => {
+const Chat: FC<ChatProps> = ({ docId }) => {
   const { user } = useUser();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,7 +42,14 @@ const Chat: FC<ChatProps> = ({ id }) => {
   const [snapshot, loading, error] = useCollection(
     user &&
       query(
-        collection(db, "users", user?.id, "files", id, "chat"),
+        collection(
+          db,
+          FB_COLL.users,
+          user.id,
+          FB_COLL.files,
+          docId,
+          FB_COLL.chat
+        ),
         orderBy("createdAt", "asc")
       )
   );
@@ -77,23 +85,23 @@ const Chat: FC<ChatProps> = ({ id }) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const q = input;
+    const question = input;
     setInput("");
 
     setMessages((prev) => [
       ...prev,
-      { role: "human", message: q, createdAt: new Date() },
+      { role: "human", message: question, createdAt: new Date() },
       { role: "ai", message: "Thinking...", createdAt: new Date() },
     ]);
 
     startTransition(async () => {
       try {
-        const { success, message } = await askQuestion(id, q);
+        const { success, title, message } = await askQuestion(docId, question);
 
         if (!success) {
           toast({
             variant: "destructive",
-            title: "Error",
+            title,
             description: message,
           });
 

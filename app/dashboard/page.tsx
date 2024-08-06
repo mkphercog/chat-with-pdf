@@ -2,7 +2,7 @@ import { protectedUserId } from "@/actions/protectedUserId";
 import AuthClerkIntoFirebase from "@/components/AuthClerkIntoFirebase";
 import Documents from "@/components/Documents";
 
-import { FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants";
+import { FB_COLL, FREE_DOC_LIMIT, PRO_DOC_LIMIT } from "@/constants";
 import { adminDb } from "@/firebaseAdmin";
 
 export const dynamic = "force-dynamic";
@@ -11,12 +11,12 @@ const Dashboard = async () => {
   const { userId } = await protectedUserId();
 
   const userDocs = await adminDb
-    .collection("users")
+    .collection(FB_COLL.users)
     .doc(userId)
-    .collection("files")
+    .collection(FB_COLL.files)
     .get();
   const currentFilesCount = userDocs.docs.length;
-  const userData = await adminDb.collection("users").doc(userId).get();
+  const userData = await adminDb.collection(FB_COLL.users).doc(userId).get();
   const userLimit = userData.data()?.hasActiveMembership
     ? PRO_DOC_LIMIT
     : FREE_DOC_LIMIT;

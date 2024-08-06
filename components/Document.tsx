@@ -8,6 +8,19 @@ import { Button } from "./ui/button";
 import { DownloadCloud, Trash2Icon } from "lucide-react";
 import deleteDocument from "@/actions/deleteDocument";
 import { ROUTES } from "@/routes";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "./ui/alert-dialog";
+import { useToast } from "./ui/use-toast";
+import { SUCCESS_TOAST_STYLES } from "@/constants";
 
 type DocumentProps = {
   id: string;
@@ -20,6 +33,27 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
   const router = useRouter();
   const [isDeleting, startTransition] = useTransition();
   const { hasActiveMembership } = useSubscription();
+  const { toast } = useToast();
+
+  const handleDeleteFile = () => {
+    if (hasActiveMembership) {
+      startTransition(async () => {
+        await deleteDocument(id);
+        toast({
+          variant: "default",
+          className: SUCCESS_TOAST_STYLES,
+          title: "Success!",
+          description: `File "${name}" deleted correctly.`,
+        });
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Free account detected",
+        description: "You'll need to upgrade to PRO to delete files.",
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col w-64 h-80 rounded-xl bg-white drop-shadow-md justify-between p-4 transition-all transform hover:scale-105 hover:bg-indigo-600 hover:text-white cursor-pointer group">
@@ -36,25 +70,32 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
       </div>
 
       <div className="flex space-x-2 justify-end">
-        <Button
-          variant="outline"
-          disabled={isDeleting || !hasActiveMembership}
-          onClick={() => {
-            const prompt = window.confirm(
-              "Are you sure you want to delete this document?"
-            );
-            if (prompt) {
-              startTransition(async () => {
-                await deleteDocument(id);
-              });
-            }
-          }}
-        >
-          <Trash2Icon className="h-6 w-6 text-red-500" />
-          {!hasActiveMembership && (
-            <span className="text-red-500 ml-2">PRO Feature</span>
-          )}
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger
+            className="flex items-center border rounded-md px-4 disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled={isDeleting}
+          >
+            <Trash2Icon className="h-6 w-6 text-red-500" />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                file {`"${name}"`}.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-indigo-600"
+                onClick={handleDeleteFile}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Button variant="outline" asChild>
           <a href={downloadUrl} download>

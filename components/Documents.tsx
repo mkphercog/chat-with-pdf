@@ -2,14 +2,15 @@ import PlaceholderDocument from "./PlaceholderDocument";
 import { adminDb } from "@/firebaseAdmin";
 import Document from "./Document";
 import { protectedUserId } from "@/actions/protectedUserId";
+import { FB_COLL } from "@/constants";
 
 const Documents = async () => {
   const { userId } = await protectedUserId();
 
   const documentsSnapshot = await adminDb
-    .collection("users")
+    .collection(FB_COLL.users)
     .doc(userId)
-    .collection("files")
+    .collection(FB_COLL.files)
     .get();
 
   return (
