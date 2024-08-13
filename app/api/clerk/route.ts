@@ -1,4 +1,7 @@
 export const dynamic = "force-dynamic";
+export const config = {
+  maxDuration: 15,
+};
 
 import deleteFilesWithAccount from "@/actions/deleteFilesWithAccount";
 import { WebhookEvent } from "@clerk/nextjs/server";

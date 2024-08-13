@@ -70,7 +70,7 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
       <div className="flex space-x-2 justify-end">
         <AlertDialog>
           <AlertDialogTrigger
-            className="flex items-center border rounded-md px-4 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center border rounded-md px-4 disabled:opacity-40  transition-all hover:scale-110"
             disabled={isDeleting}
           >
             <Trash2Icon className="h-6 w-6 text-red-500" />
@@ -95,7 +95,11 @@ const Document: FC<DocumentProps> = ({ id, name, size, downloadUrl }) => {
           </AlertDialogContent>
         </AlertDialog>
 
-        <Button variant="outline" asChild>
+        <Button
+          className="transition-all hover:scale-110"
+          variant="outline"
+          asChild
+        >
           <a href={downloadUrl} download>
             <DownloadCloud className="h-6 w-6 text-indigo-600" />
           </a>

@@ -32,7 +32,10 @@ const PricingPage = () => {
           interacting with your PDFs, enhancing productivity, and streamlining
           your workflow.
         </p>
-
+        <p className="mx-auto mt-6 max-w-2xl px-10 text-center text-lg leading-8 font-semibold text-indigo-600">
+          For both plans, after deleting your account, we will also delete all
+          your uploaded files.
+        </p>
         <div className="max-w-md mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 md:max-w-2xl gap-8 lg:max-w-4xl px-4 md:px-0">
           <div className="ring-1 ring-gray-200 p-8 h-fit pb-12 rounded-3xl">
             <h3 className="text-lg font-semibold leading-8 text-gray-900">
