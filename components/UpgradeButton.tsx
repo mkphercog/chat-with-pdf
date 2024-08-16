@@ -42,7 +42,7 @@ const UpgradeButton = () => {
       className="border-indigo-600 bg-indigo-600"
     >
       <p>
-        <span className="font-extrabold">PRO </span> Account
+        <span className="font-extrabold">PRO </span> account
       </p>
     </Button>
   );

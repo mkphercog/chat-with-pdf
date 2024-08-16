@@ -72,7 +72,7 @@ const FileUploader = () => {
         toast({
           variant: "destructive",
           title: "Wrong file extension",
-          description: "Pdf's only accepted",
+          description: "*.pdf only accepted",
         });
       }
     },

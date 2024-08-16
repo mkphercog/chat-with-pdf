@@ -24,7 +24,7 @@ const PricingPage = () => {
             Pricing
           </h2>
           <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Supercharge your Document Companion
+            Supercharge your document companion
           </p>
         </div>
         <p className="mx-auto mt-6 max-w-2xl px-10 text-center text-lg leading-8 text-gray-600">
@@ -39,11 +39,11 @@ const PricingPage = () => {
         <div className="max-w-md mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 md:max-w-2xl gap-8 lg:max-w-4xl px-4 md:px-0">
           <div className="ring-1 ring-gray-200 p-8 h-fit pb-12 rounded-3xl">
             <h3 className="text-lg font-semibold leading-8 text-gray-900">
-              Starter Plan
+              Starter plan
             </h3>
             <p className="mt-4 text-sm leading-6 text-gray-600">
               Explore core features at
-              <span className="font-bold text-gray-500"> No Cost</span>
+              <span className="font-bold  text-indigo-600"> NO COST</span>
             </p>
             <p className="mt-6 flex items-baseline gap-x-1">
               <span className="text-4xl font-bold tracking-tight text-gray-900">
@@ -68,10 +68,10 @@ const PricingPage = () => {
             </div>
 
             <h3 className="text-lg font-semibold leading-8 text-indigo-600">
-              Pro Plan
+              Pro plan
             </h3>
             <p className="mt-4 text-sm leading-6 text-gray-600">
-              Maximize Productivity with PRO Features
+              Maximize productivity with PRO features
             </p>
             <p className="mt-6 flex items-baseline gap-x-1">
               <span className="text-4xl font-bold tracking-tight text-gray-900">
