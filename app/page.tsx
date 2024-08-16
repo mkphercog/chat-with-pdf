@@ -5,12 +5,14 @@ import LandingPageFeature from "@/components/LandingPageFeature";
 import { Button } from "@/components/ui/button";
 import { LANDING_PAGE_FEATURES, LANDING_PAGE_IMAGE } from "@/constants";
 import { ROUTES } from "@/routes";
+import Cookies from "@/components/Cookies";
 
 const Home = async () => {
   const user = await currentUser();
 
   return (
     <main className="flex-1 overflow-auto p-2 lg:p-5 bg-gradient-to-bl from-white to-indigo-600">
+      <Cookies />
       <div className="bg-white py-24 sm:py-32 rounded-md drop-shadow-lg">
         <div className="flex flex-col justify-center items-center mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl sm:text-center">
