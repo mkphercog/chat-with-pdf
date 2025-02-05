@@ -1,9 +1,10 @@
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
-import Link from "next/link";
 import LandingPageFeature from "@/components/LandingPageFeature";
 import { Button } from "@/components/ui/button";
 import { LANDING_PAGE_FEATURES, LANDING_PAGE_IMAGE } from "@/constants";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import Link from "next/link";
 import { ROUTES } from "@/routes";
 
 const Home = async () => {
@@ -38,11 +39,23 @@ const Home = async () => {
           {user?.id && (
             <p className="text-3xl font-bold mt-10 text-indigo-600">{`Welcome, ${user?.firstName}!`}</p>
           )}
-          <Button asChild className="mt-8">
-            <Link prefetch={false} href={ROUTES.dashboard.root()}>
-              {user?.id ? "Go to dashboard" : "Get started"}
-            </Link>
-          </Button>
+
+          {!user?.id ? (
+            <div className="flex gap-3 mt-4">
+              <Button asChild>
+                <SignInButton />
+              </Button>
+              <Button asChild>
+                <SignUpButton />
+              </Button>
+            </div>
+          ) : (
+            <Button asChild className="mt-8">
+              <Link prefetch={false} href={ROUTES.dashboard.root()}>
+                Go to dashboard
+              </Link>
+            </Button>
+          )}
         </div>
 
         <div className="relative overflow-hidden pt-16">
@@ -72,4 +85,5 @@ const Home = async () => {
     </main>
   );
 };
+
 export default Home;

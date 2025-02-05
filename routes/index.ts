@@ -8,4 +8,8 @@ export const ROUTES = {
     pricing: () => "/dashboard/upgrade",
     fileView: (id: string) => `/dashboard/files/${id}`,
   },
+  auth: {
+    signInMatchAll: () => "/sign-in(.*)",
+    signUpMatchAll: () => "/sign-up(.*)",
+  },
 };
